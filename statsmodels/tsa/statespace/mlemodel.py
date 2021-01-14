@@ -4231,7 +4231,7 @@ class MLEResults(tsbase.TimeSeriesModelResults):
         return res
 
     def plot_diagnostics(self, variable=0, lags=10, fig=None, figsize=None,
-                         truncate_endog_names=24):
+                         truncate_endog_names=24, auto_ylims=False, **kwargs):
         """
         Diagnostic plots for standardized residuals of one endogenous variable
 
@@ -4338,10 +4338,11 @@ class MLEResults(tsbase.TimeSeriesModelResults):
         # Bottom-right: Correlogram
         ax = fig.add_subplot(224)
         from statsmodels.graphics.tsaplots import plot_acf
-        plot_acf(resid, ax=ax, lags=lags)
+        plot_acf(resid, ax=ax, lags=lags, auto_ylims=auto_ylims,
+                 bartlett_confint=False, **kwargs)
         ax.set_title('Correlogram')
 
-        ax.set_ylim(-1, 1)
+        # ax.set_ylim(-1, 1)
 
         return fig
 

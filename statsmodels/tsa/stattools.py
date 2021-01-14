@@ -580,6 +580,7 @@ def acf(
     qstat=False,
     fft=None,
     alpha=None,
+    bartlett_confint=True,
     missing="none",
 ):
     """
@@ -678,10 +679,13 @@ def acf(
     if not (qstat or alpha):
         return acf
     if alpha is not None:
-        varacf = np.ones_like(acf) / nobs
-        varacf[0] = 0
-        varacf[1] = 1.0 / nobs
-        varacf[2:] *= 1 + 2 * np.cumsum(acf[1:-1] ** 2)
+        if bartlett_confint:
+            varacf = np.ones_like(acf) / nobs
+            varacf[0] = 0
+            varacf[1] = 1.0 / nobs
+            varacf[2:] *= 1 + 2 * np.cumsum(acf[1:-1] ** 2)
+        else:
+            varacf = 1.0 / len(acf)
         interval = stats.norm.ppf(1 - alpha / 2.0) * np.sqrt(varacf)
         confint = np.array(lzip(acf - interval, acf + interval))
         if not qstat:

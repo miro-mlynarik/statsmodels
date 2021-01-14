@@ -36,6 +36,7 @@ def _plot_corr(
     irregular,
     use_vlines,
     vlines_kwargs,
+    auto_ylims=False,
     **kwargs,
 ):
     if irregular:
@@ -55,6 +56,10 @@ def _plot_corr(
     ax.margins(0.05)
     ax.plot(lags, acf_x, **kwargs)
     ax.set_title(title)
+
+    ax.set_ylim(-1, 1)
+    if auto_ylims:
+        ax.set_ylim(min(1.1*acf_x), max(1.1*acf_x))
 
     if confint is not None:
         if lags[0] == 0:
@@ -82,6 +87,8 @@ def plot_acf(
     missing="none",
     title="Autocorrelation",
     zero=True,
+    auto_ylims=False,
+    bartlett_confint=True,
     vlines_kwargs=None,
     **kwargs,
 ):
@@ -179,6 +186,7 @@ def plot_acf(
         nlags=nlags,
         alpha=alpha,
         fft=fft,
+        bartlett_confint=bartlett_confint,
         adjusted=adjusted,
         missing=missing,
     )
@@ -194,6 +202,7 @@ def plot_acf(
         irregular,
         use_vlines,
         vlines_kwargs,
+        auto_ylims=auto_ylims,
         **kwargs,
     )
 
